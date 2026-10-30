@@ -1,4 +1,4 @@
-# Multi-Camera CCTV Analytics
+# Multi-Camera CCTV Analytics Project
 
 **CPU-optimised, four-camera video analytics with person detection, tracking, experimental cross-camera association, event rules, and MQTT.**
 
@@ -270,7 +270,7 @@ The x1.0 checkpoint is **optional**; do not download or rename an unrelated `.pt
 From your cloned or staged **public** repository:
 
 ```bat
-git clone https://github.com/YOUR_USERNAME/multicam-analytics.git
+git clone https://github.com/nanthawe/multicam-analytics.git
 cd multicam-analytics
 py -3.11 -m venv .venv
 .venv\Scripts\activate
@@ -379,13 +379,6 @@ python -m src.demo_release serve --output outputs/demo/github_demo --port 8765
 
 Then open **http://127.0.0.1:8765/** in a browser.
 
-**If you still have the original Step 14.28 run** from this project's development history, you can reproduce the previously verified Trial 2 dashboard directly:
-
-```bat
-python -m src.demo_release build --source outputs/rtsp/step14_28 --trial overlay_mqtt_02 --output outputs/demo/step14_29
-python -m src.demo_release serve --output outputs/demo/step14_29 --port 8765
-```
-
 The dashboard exporter creates:
 
 ```text
@@ -397,8 +390,6 @@ outputs/demo/github_demo/
 ```
 
 Use the dashboard to **view the four-camera mosaic**, **search/filter the event timeline**, **jump from an event to the corresponding rendered video frame**, and **inspect measured performance and MQTT-delivery results**. Video playback timestamps represent encoded-frame positions, **not wall-clock camera capture timestamps**.
-
-The repository **does not include demo footage**: these files are generated locally after running inference. If the build rejects a run because MQTT validation is inconclusive or the video is missing, use a completed run with the required evidence; do not fabricate a PASS report. Build into a new output folder rather than overwriting an existing demo.
 
 ## Reproduce experiments
 
@@ -436,34 +427,7 @@ python -m src.identity_validation report
 
 **Not runnable from a fresh clone without prerequisites:** this stage requires the early-frame oracle manifest, original annotations, cached earlier OSNet features and Step 14.25 source-consistency report, plus the matching pretrained checkpoint hash. Consult [`docs/EVALUATION.md`](docs/EVALUATION.md) and the module's docstring. It uses oracle camera-local tracks and is an **offline association diagnostic**, not a live person-ID score.
 
-## Before-and-after showcase
-
-This project retains its unsuccessful experiments because their outcomes shaped the engineering decisions.
-
-| Engineering question | Controlled baseline | Alternative / result | Decision |
-|---|---|---|---|
-| Can camera-balanced association recover more cross-camera pairs? | 29 correct pair observations | **167** correct on the same later annotated clip | Promising **offline** result; not deployed because recall remains only 4.52% |
-| Is a larger ReID encoder worthwhile on this CPU? | OSNet x0.25: 54% Rank-1, 5.92 ms/crop | x1.0: 47.33% Rank-1, 65.85 ms/crop (sampled pilot) | Keep x0.25 |
-| Can source-history agreement reject a false merge? | One studied wrong pair produced 18 false observations | A stricter guard rejected that merge in the inspected clip | Diagnostic finding; guard did **not** change decisions in the later clip |
-| Does the full system consistently sustain 20 FPS? | Target: 4 × 5 FPS | 15.20–16.84 FPS over 3 long trials | Throughput limit reported; no unsupported real-time claim |
-
-### Suggested short portfolio demo
-
-1. **0–15 s:** Introduce the architecture and show the four-camera mosaic.
-2. **15–35 s:** Explain confirmed ByteTrack IDs versus provisional overlay boxes; click a zone or line event.
-3. **35–55 s:** Show a **chart/table** of the offline 29 → 167 association comparison, labelled *oracle-tracking / undeployed*.
-4. **55–75 s:** Show CPU/throughput and 927/927 MQTT results alongside the unmet 20 FPS target.
-5. **75–90 s:** Explain why the heavier encoder was rejected, what remains unresolved, and how to reproduce the tests.
-
-Optional side-by-side video from **two real comparable recorded runs**:
-
-```bat
-python scripts\build_showcase_video.py --baseline "PATH_TO_BASELINE_PREVIEW.mp4" --experimental "PATH_TO_EXPERIMENT_PREVIEW.mp4" --output "outputs\showcase\side_by_side.mp4" --seconds 30
-```
-
-This is a visual comparison **only**. Independently replayed RTSP runs are not guaranteed frame-perfect alignment. Do **not** label the offline Hungarian result as a live visual upgrade unless you actually recorded a live run using that policy and documented the change. If you have only one valid recording, use the single-run dashboard plus controlled metric charts.
-
-**Showcase guide:** [`docs/SHOWCASE.md`](docs/SHOWCASE.md) · **Experiment index:** [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) · **Curated results:** [`docs/evidence/curated/`](docs/evidence/curated/)
+**Experiment index:** [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) · **Curated results:** [`docs/evidence/curated/`](docs/evidence/curated/)
 
 ## Repository structure
 
