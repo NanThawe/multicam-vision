@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local videos, model files, and generated results
+data/wildtrack/*
+!data/wildtrack/.gitkeep
+models/*
+!models/.gitkeep
+outputs/**
+!outputs/**/
+!outputs/**/.gitkeep

@@ -1,0 +1,41 @@
+{
+  "evaluation": "3 x 180-second four-camera RTSP runs with local MQTT independent subscriber",
+  "fps_target": 20.0,
+  "strict_realtime_target_met": false,
+  "trials": [
+    {
+      "trial": "overlay_mqtt_01",
+      "fps": 15.196,
+      "worst_10s_fps": 13.6,
+      "overwrites": 1047.0,
+      "events_generated": 354,
+      "unique_mqtt_received": 354,
+      "mqtt_missing": 0,
+      "mqtt_duplicates": 0
+    },
+    {
+      "trial": "overlay_mqtt_02",
+      "fps": 16.683,
+      "worst_10s_fps": 15.2,
+      "overwrites": 779.0,
+      "events_generated": 351,
+      "unique_mqtt_received": 351,
+      "mqtt_missing": 0,
+      "mqtt_duplicates": 0
+    },
+    {
+      "trial": "overlay_mqtt_03",
+      "fps": 16.839,
+      "worst_10s_fps": 12.8,
+      "overwrites": 751.0,
+      "events_generated": 222,
+      "unique_mqtt_received": 222,
+      "mqtt_missing": 0,
+      "mqtt_duplicates": 0
+    }
+  ],
+  "events_generated_total": 927,
+  "events_received_total": 927,
+  "application_overwrites_total": 2577,
+  "limitations": "No exactly-once guarantee or event-label accuracy. No consistently sustained 20 FPS."
+}

@@ -1,0 +1,15 @@
+{
+  "evaluation": "Market-1501 sampled 150-query pilot with reduced gallery",
+  "osnet_x0_25": {
+    "rank1": 0.54,
+    "map": 0.363326,
+    "cpu_ms_per_crop": 5.9185
+  },
+  "osnet_x1_0": {
+    "rank1": 0.473333,
+    "map": 0.311013,
+    "cpu_ms_per_crop": 65.8513
+  },
+  "source": "Reported terminal output; full machine-readable pilot report not uploaded",
+  "limitations": "Pilot accuracy; not full official Market-1501 benchmark; inference cost not end-to-end FPS."
+}

@@ -1,0 +1,23 @@
+{
+  "evaluation": "WILDTRACK late clip, 60 synchronized annotated frame sets, same site",
+  "ground_truth_boxes_and_oracle_local_tracks": true,
+  "true_co_visible_pairs": 3694,
+  "production_ema": {
+    "tp": 29,
+    "fp": 0,
+    "fn": 3665,
+    "precision": 1.0,
+    "recall": 0.00785,
+    "unique_correctly_linked_gt_identities": 3
+  },
+  "experimental_camera_balanced_hungarian": {
+    "tp": 167,
+    "fp": 0,
+    "fn": 3527,
+    "precision": 1.0,
+    "recall": 0.04521,
+    "unique_correctly_linked_gt_identities": 11
+  },
+  "deployed_experimental": false,
+  "limitations": "Per-frame correlated pair observations; not IDF1/HOTA; oracle boxes/tracks; same cameras and site."
+}

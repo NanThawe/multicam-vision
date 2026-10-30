@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MultiCam | Recorded Analytics Demo</title>
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#e9eef5;background:#0b121b;font-synthesis:none}
+    *{box-sizing:border-box} body{margin:0} button,select,input{font:inherit}button{cursor:pointer}
+    .shell{max-width:1440px;padding:24px 28px 60px;margin:auto}.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#7edbc8;font-weight:700}
+    header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:22px;border-bottom:1px solid #233244}
+    .mark{font-size:22px;font-weight:750;letter-spacing:-.045em}.mark b{color:#73d9c6} .sub{color:#95a5b7;font-size:13px;margin-top:5px}
+    .state{font-size:12px;letter-spacing:.05em;font-weight:750;color:#e3c38a;background:#392f22;border:1px solid #806142;border-radius:8px;padding:9px 13px}
+    h1{font-size:clamp(27px,3vw,40px);letter-spacing:-.055em;font-weight:750;line-height:1.16;margin:16px 0 10px}
+    .lead{color:#aab9c9;max-width:820px;line-height:1.55;font-size:14px;margin:0 0 26px}
+    .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+    .metric{background:#121d29;border:1px solid #253447;border-radius:12px;padding:18px 17px;min-width:0}
+    .metric .k{font-size:11px;text-transform:uppercase;letter-spacing:.095em;color:#94a4b5;line-height:1.4;min-height:28px}
+    .metric .v{margin-top:5px;font-size:29px;font-weight:750;letter-spacing:-.06em;white-space:nowrap}.metric .hint{font-size:12px;color:#8898aa;margin-top:8px}
+    .v.good{color:#79d9c7}.v.warn{color:#e1b678}
+    .layout{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(300px,1fr);gap:16px;align-items:start}
+    .panel{background:#121d29;border:1px solid #253447;border-radius:13px;overflow:hidden}
+    .panel-head{padding:17px 20px;border-bottom:1px solid #263748;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .panel-head strong{font-size:14px;letter-spacing:.01em}.panel-head small{color:#8ba0b5;font-size:11px}
+    .video-wrap{position:relative;background:#050b10;aspect-ratio:16/9;overflow:hidden}
+    .video-wrap video{width:100%;height:100%;display:block;aspect-ratio:16/9;background:#04080d}
+    #ruleOverlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .video-meta{padding:15px 18px;display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:#9daec0}
+    .legend{border:1px solid #37475b;border-radius:6px;padding:5px 8px;white-space:nowrap}.legend span{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px}
+    .events-panel{height:100%;min-height:460px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:14px 16px}
+    .filters select,.filters input{width:100%;min-width:0;border:1px solid #36485b;border-radius:8px;background:#0b1520;color:#e7eef8;padding:10px 9px;font-size:12px}
+    .filters input{grid-column:span 2}.filters select:focus,.filters input:focus{outline:2px solid #76d9c7;outline-offset:1px}
+    #eventCount{padding:0 17px 8px;color:#9baabd;font-size:12px}.event-list{overflow:auto;max-height:460px;padding:0 10px 10px}
+    .event{width:100%;border:none;text-align:left;padding:13px 11px;border-radius:8px;background:transparent;color:#e5edf5;display:flex;gap:12px;align-items:center;border-bottom:1px solid #1d2c3c}
+    .event:hover,.event:focus{background:#213143;outline:none}.event .pill{font-size:10px;font-weight:700;border-radius:6px;background:#263649;padding:5px 7px;color:#8ccedf;white-space:nowrap}
+    .event .main{flex:1;min-width:0}.event strong{font-size:12px;display:block;letter-spacing:.015em}.event .detail{color:#91a3b4;font-size:11px;margin-top:5px}.event .seek{color:#83dcca;font-size:12px}
+    .bottom{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(290px,1fr);gap:16px;margin-top:17px}
+    .body{padding:19px 20px}.distribution{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.cam{background:#0b1520;border:1px solid #26374a;padding:13px;border-radius:9px}
+    .cam strong{font-size:13px}.cam .value{font-size:23px;font-weight:740;letter-spacing:-.035em;margin-top:8px}.cam small{font-size:11px;color:#8ba0b5}
+    .bar{height:6px;background:#2b3b4d;border-radius:20px;margin-top:12px;overflow:hidden}.bar div{background:#78d8c6;height:100%;border-radius:20px}
+    .note{color:#a2b2c1;font-size:12px;line-height:1.75;margin:0}.note p{margin:0 0 7px}.notes{margin:0;padding-left:18px}
+    .foot{font-size:12px;color:#8195a9;margin-top:22px;padding-top:15px;border-top:1px solid #243447;line-height:1.6}
+    .empty{color:#9baabd;font-size:13px;padding:20px}.error{color:#f0adad;border:1px solid #724047;background:#321e25;padding:16px;border-radius:10px;margin-top:18px}
+    @media(max-width:1100px){.layout{grid-template-columns:1fr}.events-panel{min-height:0}.metrics{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:680px){.shell{padding:20px 13px}.metrics{grid-template-columns:repeat(2,1fr)}.bottom{grid-template-columns:1fr}.distribution{grid-template-columns:repeat(2,1fr)}header{align-items:start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header><div><div class="mark">multi<b>cam</b><span style="font-weight:400;color:#9eabba"> / perception analytics</span></div><div class="sub">CPU-based four-camera video processing · technical demonstration</div></div><div class="state">● RECORDED REPLAY · NOT LIVE</div></header>
+  <section><div class="eyebrow" style="margin-top:27px">Step 14.29 / portfolio demonstration</div><h1>Four-camera analytics, with the evidence visible.</h1><p class="lead">The video is an actual recorded inference preview from one RTSP benchmark trial. Local tracks, provisional detections, tentative global IDs and generated events are distinguished. All metrics come from measured run artifacts, not a simulation.</p></section>
+  <div id="error" class="error" hidden></div>
+  <section class="metrics" aria-label="Run measurements">
+    <div class="metric"><div class="k">Measured throughput</div><div class="v" id="fps">—</div><div class="hint" id="fpsHint">Four streams combined</div></div>
+    <div class="metric"><div class="k">Local MQTT delivery</div><div class="v good" id="mqtt">—</div><div class="hint" id="mqttHint">Independent subscriber</div></div>
+    <div class="metric"><div class="k">Generated events</div><div class="v" id="eventTotal">—</div><div class="hint">Confirmed local tracks only</div></div>
+    <div class="metric"><div class="k">Frame overwrites</div><div class="v warn" id="drops">—</div><div class="hint">Application buffer only</div></div>
+    <div class="metric"><div class="k">P95 batch latency</div><div class="v" id="batch">—</div><div class="hint">Four-camera processing batch</div></div>
+  </section>
+  <div class="layout">
+    <section class="panel">
+      <div class="panel-head"><strong>Four camera views · synchronized rendered mosaic</strong><small id="trialLabel">—</small></div>
+      <div class="video-wrap"><video id="preview" controls playsinline preload="metadata" aria-label="Recorded four-camera inference preview"><source src="preview_h264.mp4" type="video/mp4" />Your browser cannot play this H.264 video.</video><svg id="ruleOverlay" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" aria-label="Illustrative zone and line overlays"></svg></div>
+      <div class="video-meta"><span class="legend"><span style="background:#66d999"></span>L = confirmed local track</span><span class="legend"><span style="background:#ffbb70"></span>P = provisional (visual only)</span><span class="legend"><span style="background:#66d999"></span>G = unverified cross-camera association</span><span class="legend"><span style="background:#78d8c6"></span>Zone / line = illustrative</span></div>
+    </section>
+    <section class="panel events-panel">
+      <div class="panel-head"><strong>Recorded event log</strong><small>Click event to jump to its rendered frame</small></div>
+      <div class="filters"><select id="cameraFilter" aria-label="Filter camera"><option value="all">All cameras</option><option>C1</option><option>C2</option><option>C3</option><option>C4</option></select><select id="typeFilter" aria-label="Filter event type"><option value="all">All event types</option><option value="zone_entry">Zone entry</option><option value="zone_exit">Zone exit</option><option value="line_crossing">Line crossing</option></select><input id="query" type="search" placeholder="Find local track ID or event ID" aria-label="Search recorded events" /></div>
+      <div id="eventCount">—</div><div class="event-list" id="events" aria-label="Event list"></div>
+    </section>
+  </div>
+  <div class="bottom">
+    <section class="panel"><div class="panel-head"><strong>Per-camera event counts</strong><small>Per-camera, not distinct people</small></div><div class="body"><div class="distribution" id="cameraCounts"></div><p class="sub" style="margin:14px 0 0">Zone and line rules are placeholders until the scene is calibrated. Events are keyed on confirmed local tracks; cross-camera IDs are not used to deduplicate counts.</p></div></section>
+    <section class="panel"><div class="panel-head"><strong>Evaluation boundaries</strong><small>Claims we are not making</small></div><div class="body"><ul class="note notes" id="limitations"></ul></div></section>
+  </div>
+  <footer class="foot">Source: existing Step 14.28 RTSP/MQTT validation trial. The video runs at a fixed playback rate, not the original capture rate. Event links map to rendered batch positions; do not interpret video time as network or capture-to-display latency. The <code>evidence_manifest.json</code> file lists cryptographic hashes of the original run artifacts and this export.</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const addText = (parent, tag, value, cls) => {const el=document.createElement(tag);el.textContent=String(value);if(cls)el.className=cls;parent.appendChild(el);return el;};
+function n(value, digits=0){return typeof value==='number'&&Number.isFinite(value)?value.toLocaleString('en-US',{minimumFractionDigits:digits,maximumFractionDigits:digits}):'—';}
+function drawRules(rules){
+ const svg=$('ruleOverlay'),NS='http://www.w3.org/2000/svg';
+ svg.replaceChildren();
+ ['C1','C2','C3','C4'].forEach((cam,index)=>{
+   if(!rules[cam])return;
+   const xo=(index%2)*640,yo=Math.floor(index/2)*360;
+   const z=rules[cam].zone,line=rules[cam].line;
+   const rect=document.createElementNS(NS,'rect');
+   rect.setAttribute('x',xo+z[0]*640);rect.setAttribute('y',yo+z[1]*360);
+   rect.setAttribute('width',(z[2]-z[0])*640);rect.setAttribute('height',(z[3]-z[1])*360);
+   rect.setAttribute('stroke','#8cf4c5');rect.setAttribute('fill','rgba(92,230,173,.075)');rect.setAttribute('stroke-width','2');
+   svg.appendChild(rect);
+   const ln=document.createElementNS(NS,'line');
+   ln.setAttribute('x1',xo+line[0][0]*640);ln.setAttribute('y1',yo+line[0][1]*360);
+   ln.setAttribute('x2',xo+line[1][0]*640);ln.setAttribute('y2',yo+line[1][1]*360);
+   ln.setAttribute('stroke','#e0d08a');ln.setAttribute('stroke-width','2');ln.setAttribute('stroke-dasharray','8 5');
+   svg.appendChild(ln);
+ });
+}
+function render(data){
+ const m=data.metrics;
+ $('fps').textContent=n(m.aggregate_fps,2)+' FPS';$('fps').classList.add(m.target_met?'good':'warn');
+ $('fpsHint').textContent=`Target ${n(m.fps_target)} aggregate FPS · ${m.target_met?'target reached':'strict target not met'}`;
+ $('mqtt').textContent=m.mqtt_status;$('mqttHint').textContent=`${n(m.mqtt_unique_received)}/${n(m.events_generated)} events observed`;
+ $('eventTotal').textContent=n(m.events_generated);$('drops').textContent=n(m.buffer_overwrites);$('batch').textContent=n(m.batch_p95_ms)+' ms';
+ $('trialLabel').textContent=data.trial;drawRules(data.rules);
+ const counts=$('cameraCounts'); counts.replaceChildren();
+ const values=['C1','C2','C3','C4'].map(cam=>Object.values(data.event_counts[cam]).reduce((a,b)=>a+b,0));
+ const max=Math.max(1,...values);
+ ['C1','C2','C3','C4'].forEach((cam,i)=>{
+   const card=addText(counts,'div','', 'cam'); addText(card,'strong',cam);addText(card,'div',n(values[i]),'value');addText(card,'small','Recorded events');
+   const track=addText(card,'div','', 'bar');const bar=document.createElement('div');bar.style.width=(100*values[i]/max)+'%';track.appendChild(bar);
+ });
+ const notes=$('limitations'); notes.replaceChildren();data.limitations.forEach(v=>addText(notes,'li',v));
+ const all=data.events.slice().sort((a,b)=>a.video_offset_s-b.video_offset_s);
+ const update=()=>{
+   const cam=$('cameraFilter').value,typ=$('typeFilter').value,q=$('query').value.trim().toLowerCase();
+   const filtered=all.filter(e=>(cam==='all'||cam===e.camera)&&(typ==='all'||typ===e.event_type)&&(!q||`${e.track_id} ${e.event_id} ${e.global_id??''}`.toLowerCase().includes(q)));
+   $('eventCount').textContent=`${n(filtered.length)} matching events · showing ${Math.min(filtered.length,200)}`;
+   const list=$('events');list.replaceChildren();
+   if(!filtered.length){addText(list,'div','No matching events','empty');return;}
+   filtered.slice(0,200).forEach(e=>{
+     const b=addText(list,'button','', 'event');b.type='button';b.title='Seek recorded video to event frame';
+     addText(b,'span',e.camera,'pill');const main=addText(b,'span','','main');
+     addText(main,'strong',e.event_type.replaceAll('_',' ').toUpperCase());
+     addText(main,'span',`L${e.track_id} · Frame ${e.frame_id} · ${n(e.elapsed_s,2)}s run-relative`, 'detail');
+     addText(b,'span','▶ '+n(e.video_offset_s,1)+'s','seek');
+     b.addEventListener('click',()=>{const player=$('preview');player.currentTime=e.video_offset_s;player.scrollIntoView({block:'nearest',behavior:'smooth'});});
+   });
+ };
+ ['cameraFilter','typeFilter'].forEach(id=>$(id).addEventListener('change',update));$('query').addEventListener('input',update);update();
+}
+fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('data.json unavailable');return r.json()}).then(render).catch(e=>{const el=$('error');el.hidden=false;el.textContent='Could not load demo data. Run "python -m src.demo_release serve" and open http://127.0.0.1:8765/. '+e.message;});
+</script>
+</body>
+</html>
