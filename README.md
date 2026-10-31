@@ -2,9 +2,9 @@
 
 **CPU-optimised, four-camera video analytics with person detection, tracking, experimental cross-camera association, event rules, and MQTT.**
 
-<img width="906" height="610" alt="ezgif-811681f6113bcff7" src="https://github.com/user-attachments/assets/789fa521-1bb9-44b7-a6de-2e2296f9971a" />
-
 A reproducible computer-vision engineering project built for **Windows + Python**, with local RTSP streams replayed from recorded videos. It combines YOLO26 Nano, ByteTrack, OSNet appearance embeddings, a lightweight global-ID matcher, zone/line event processing, and a recorded four-camera dashboard. The project also includes controlled evaluation scripts, CPU performance experiments, and reproducible benchmark reports.
+
+<img width="906" height="610" alt="demo_video_gif" src="https://github.com/user-attachments/assets/5ca9ac7f-1ece-423f-af4c-976de1445322" />
 
 > **Project status:** Research/engineering prototype — **not** a production surveillance system or verified person-identification system. Cross-camera IDs are tentative. The browser dashboard replays a **recorded** inference run; it is not a live stream. The 20-FPS aggregate processing goal was **not** consistently achieved.
 
